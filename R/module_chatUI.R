@@ -116,38 +116,35 @@ chatModule_send_message <- function(chat_id,
                                     # Shiny context
                                     input, output, session) {
 
-  observeEvent(input$sendMessage, {
-
-    req(input$messageInput)
-
-    # Collate message data
-    new_message <- tibble(
-      timestamp = now(),
-      sender = "user",
-      message = input$messageInput,
-      pending = FALSE
-    )
-
-    # Clear the input:
-    updateTextInput(session, "messageInput", value = "")
-    
-    # Save that:
-    chatModule_save_message(chat_id,
-                            new_message,
-                            input, output, session)
-    
-    # Render it:
-    insertUI(
-      
-    )
-    chatModule_render_message(new_message,
-                              input, output, session)
-
-    # Dispatch to new worker(?) to await API response:
-    # TODO
-    
-  })
-
+  # Collate message data
+  new_message <- tibble(
+    timestamp = now(),
+    sender = "user",
+    message = input$messageInput,
+    pending = FALSE
+  )
+  
+  print(new_message)
+  
+  # Clear the input:
+  updateTextInput(session, "messageInput", value = "")
+  
+  # Save that:
+  chatModule_save_message(chat_id,
+                          new_message,
+                          input, output, session)
+  
+  # Render it:
+  # TODO: rewrite to avoid re-rendering 100% of the chat every time
+  #   (And to avoid any costly calls to the eventual 'database' to re-retrieve
+  #   everything...)
+  chatModule_initialise(chat_database |> pluck(chat_id),
+                        input, output, session)
+  
+  # Dispatch to new worker(?) to await API response:
+  # TODO
+  
+  
 }
 
 
