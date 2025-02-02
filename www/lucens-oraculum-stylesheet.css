@@ -35,3 +35,22 @@
   font-size: 0.8em; 
   opacity: 0.7;
 }
+
+
+
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.message.user {
+  align-self: flex-end;
+  background: #007bff;
+  color: white;
+}
+
+.message.assistant {
+  align-self: flex-start;
+  background: #f8f9fa;
+}
